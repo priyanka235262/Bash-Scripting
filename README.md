@@ -222,3 +222,137 @@ You can combine these redirection operators to achieve different results. For ex
 
 command > output.log 2> error.log: Redirects stdout to output.log and stderr to error.log.
 command 2>&1 > output.log: Redirects both stdout and stderr to output.log.
+
+Write text to a file.
+echo "New line" >> filename.txt appends "New line" to the end of filename.txt.
+Using printf:
+
+Format and write output to a file.
+printf "Name: %s\nAge: %d\n" "John Doe" 30 > info.txt writes formatted output to info.txt.
+4. Appending to Files
+
+Using >>:
+Append text to the end of an existing file.
+echo "Another line" >> filename.txt adds "Another line" to the end of filename.txt.
+File Permissions
+
+Permissions: Control who can read, write, and execute files.
+Permissions Categories:
+Owner: The user who created the file.
+Group: The group the file belongs to.
+Others: All other users on the system.
+Permissions:
+Read (r): Allows reading the contents of the file.
+Write (w): Allows modifying the file (writing or deleting).
+Execute (x): Allows running the file as a program (if it's a script) or entering a directory (if it's a directory).
+Changing File Permissions
+
+Using chmod:
+chmod [ugoa][+-=][rwx] filename
+
+u: User (owner)
+g: Group
+o: Others
+a: All (user, group, and others)
++: Add permissions
+-: Remove permissions
+=: Set permissions explicitly
+r: Read permission
+w: Write permission
+x: Execute permission
+Examples:
+
+chmod u+x my_script.sh: Add execute permission for the owner of my_script.sh.
+chmod go-r my_file.txt: Remove read permission for group and others from my_file.txt.
+Example:
+
+Bash
+
+touch myfile.txt
+echo "Line 1" > myfile.txt
+echo "Line 2" >> myfile.txt
+cat myfile.txt 
+chmod 644 myfile.txt # Owner: Read/Write, Group: Read, Others: Read
+
+1. Using set -x (Tracing)
+
+Purpose: This option enables tracing mode within the shell script, displaying each line of the script as it's executed, along with the values of variables.
+
+How to use:
+
+Include set -x at the beginning of the script or within a specific block of code.
+set +x disables tracing mode.
+Example:
+
+Bash
+
+#!/bin/bash
+
+set -x
+
+echo "Starting script..."
+MY_VARIABLE="Hello"
+echo "MY_VARIABLE: $MY_VARIABLE"
+
+set +x
+
+echo "Tracing disabled." 
+Output:
++ echo 'Starting script...'
+Starting script...
++ MY_VARIABLE='Hello'
++ echo 'MY_VARIABLE: Hello'
+MY_VARIABLE: Hello
++ set +x
+echo 'Tracing disabled.'
+Tracing disabled.
+2. Using echo Statements
+
+Purpose: Insert echo statements within the script to display the values of variables, the results of intermediate calculations, or status messages.
+Example:
+Bash
+
+#!/bin/bash
+
+echo "Processing file..."
+# ... (rest of the script)
+echo "File processed successfully."
+3. Using Debugging Tools
+
+gdb (GNU Debugger):
+A powerful debugger that can be used to debug shell scripts.
+Requires compiling the script into an executable.
+bashdb:
+A debugger specifically designed for Bash scripts.
+Provides features like setting breakpoints, examining variables, and stepping through the script line by line.
+Tips for Effective Debugging
+
+Break Down Complex Problems: Divide the script into smaller, more manageable parts.
+Use Commenting: Add comments to explain the purpose of different sections of the script.
+Test Incrementally: Test small sections of the script at a time to isolate and fix issues.
+Use a Debugger: For more complex issues, consider using a debugger like bashdb.
+Search for Errors: Look for error messages in the output and consult online resources or documentation for solutions.
+Example:
+
+Bash
+
+#!/bin/bash
+
+set -x
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <filename>"
+  exit 1
+fi
+
+filename="$1"
+
+if [ ! -f "$filename" ]; then
+  echo "Error: File '$filename' not found."
+  exit 1
+fi
+
+# ... (rest of the script)
+
+set +x
+This example demonstrates the use of set -x for tracing, checks for command-line arguments and file existence, and includes error messages for invalid input.
