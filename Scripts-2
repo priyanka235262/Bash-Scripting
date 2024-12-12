@@ -1,0 +1,130 @@
+#Scripts-
+
+Server Setu and Configuration
+
+echo "Updating System Packages"
+sudo apt update && sudo apt upgrade -y
+
+#install essential pacakges
+echo "installing essential packages"
+sudo apt install -y git curl vim
+
+#Adda new ser
+echo "Creating a new user ..."
+sudo adduser --gecos " " devops
+sudo usermod -aG sudo devops
+
+#enable firewall and allow ssh
+echo "Confirming the firewall..."
+sudo ufw allow OpenSSH
+sudo ufw enable
+
+echo "Server setup completed successfully"
+
+2.AUTOMATED BACKUPS:
+Backup Directory
+ #!/bin/bash
+SOURCE_DIR ="/var/www/html"
+BACKUP_DIR="/backups"
+TIMESTAMP=$(date +"$%Y-%m-%d_%H-%M-%S")
+BACKUP_FILE="backup_$TIMESTAMP.tar.gz"
+
+mkdir -p "$BACKUP_DIR"
+
+echo"Creating a backup of SOURCE_DIR.."
+tar -czf "$BACKUP_DIR/$BACKUP_FILES" "$SOURCE_DIR"
+
+echo "Backup complted: $BACKUP_DIR/$BACKUP_FILE"
+
+3.LOG ROTATION:
+Log Rotation:
+LOG_DIR="/var/log/myapp"
+ARCHIEVE_DIR=/var/log/myapp/archieve"
+TIMESTAMP=$(date +"%Y-%m-%d")
+
+mkdir -p "$ARCHIEVE_DIR"
+
+echo "Rotating logs"
+find "$LOG_DIR" -type f -name "*.log" -exec -mv {}
+"$ARCHIEVE_DIR"/{}.$TIMESTAMP \;
+
+echo "compressing archieved logs"
+find "$ARCHIEVE_DIR" type f -name "*.log.$TIMESTAMP" -exec gzip {} \;
+echo "Log rotation complted"
+
+4.CONTINIOUS DEPLOYMENT:
+#!/bin/bash
+REPO_DIR = "/var/www/myapp"
+BRACH="main"
+#navigate to the repository directory
+cd "REPO_DIR" || exit
+#pull the latest changes
+echo "pulling latest changes from $BRANCH branch..."
+git checkout "$BRANCH"
+git pull origin "$BRANCH"
+
+5.MONITORING AND ALERTING:
+Monitor Disk Usage
+#!/bin/bash
+THRESHOLD=80
+EMAIL="admin@example.com"
+#Get disk usage percentage"
+DISK
+_USAGE=$(df -h / | grep -vE '^Filesystem' | awk '{print $5}' | sed 's/%//')
+#check if usage exceeds threshold
+if [ "$DISK_USAHE" -gt "$THRESHOLD"]; then
+echo "Disk usage is at $DISK_USAGE%. Sending alert to $EMAIL."
+echo "Warning: Disk usage is at $DISK_USAGE%." | mail -s "Disk Usage Alert" "$EMAIL"
+else
+ echo "Disk usage is under control: $DISK_USAGE%."
+fi
+
+6.CICD Pipeline Tasks
+Run Tests
+#!/bin/bash
+#navigate to project dir
+PROJECT_DIR="/homeuser/myproject"
+cd "$PROJECT_DIR" || exit
+#run tests
+echo "running tests...."
+./run-tests.sh
+#check test results
+if [ $? -eq 0 ]; then
+ echo "Tests passed successfully"
+else
+  echo "Tests failed!"
+  exit 
+fi
+
+
+7.DATA PROCESSING AND CLEANUP
+Clean temporary files
+#!/bin/bash
+TEMP_DIR="/tmp"
+DAYS_OLD=4
+#find and delete files older than spcified days"
+echo "Cleaning up temporary files older than $DAYS_OLD days in 
+$TEMP_DIR..."
+find "$TEMP_DIR" -type f -mtime +$DAYS_OLD -exec rm -f {} \;
+
+echo "temporary files cleaup complted"
+
+8.APPLICATION MONITORING:
+#!/bin/bash
+#check if the service is running
+if systemct; is-active --quiet "$SERVICE"; then
+  echo "$SERVICE is running"
+else
+  echo "$SERVICE is not running.Restarting...."
+  sudo systemctl restart "$SERVICE"
+
+#verify restarts
+if systemctl is-active --quiet "$SERVICE"; then
+  echo "$SERVICE restarted successfully"
+else
+  echo "Failed to restart $SERVICE.,"
+  exit 1
+ fi
+fi
+
+
